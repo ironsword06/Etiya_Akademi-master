@@ -1,0 +1,77 @@
+<div class="mb-3">
+  <input
+    type="text"
+    [(ngModel)]="filterProduct"
+    class="form-control mt-3"
+    id="filterProduct"
+    placeholder="Search...."
+  />
+</div>
+<div *ngIf="products.length == 0" class="alert alert-success">
+  There is no such a product
+</div>
+<div
+  *ngIf="dataLoaded === false"
+  class="spinner-border text-primary"
+  role="status"
+>
+  <span class="visually-hidden">Loading...</span>
+</div>
+
+<table *ngIf="dataLoaded === true" class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Product Name</th>
+      <th>Category</th>
+      <th>Unit Price</th>
+      <th>Price</th>
+      <th>Units In Stock</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products">
+      <td>{{ product.id }}</td>
+      <td>{{ product.name | uppercase }}</td>
+      <td>{{ product.categoryId }}</td>
+      <td>{{ product.unitPrice | currency }}</td>
+      <td>{{ product.unitPrice | vatAdded : 18 | currency }}</td>
+      <td>{{ product.unitsInStock }}</td>
+      <td>
+        <button [routerLink]="['edit', product.id]" class="btn btn-success">
+          Edit
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-end">
+    <li class="page-item active">
+      <select
+        class="form-control"
+        [value]="pagination.limit"
+        (change)="changePageSize($event)"
+      >
+        <option value="5">5 Products Per Page</option>
+        <option value="10">10 Products Per Page</option>
+        <option value="15">15 Products Per Page</option>
+      </select>
+    </li>
+    <!-- <li class="page-item disabled">
+        <a class="page-link">Previous</a>
+      </li> -->
+    <li
+      *ngFor="let pageNumber of pageNumbers"
+      class="page-item"
+      (click)="onPagination(pageNumber)"
+    >
+      <a [class]="setActiveToCurrentPage(pageNumber)">{{ pageNumber }}</a>
+    </li>
+    <!-- <li class="page-item">
+        <a class="page-link" >Next</a>
+      </li> -->
+  </ul>
+</nav>

@@ -1,0 +1,45 @@
+<div class="mb-3">
+  <input
+    type="text"
+    [(ngModel)]="filterCategory"
+    class="form-control mt-3"
+    id="filterCategory"
+    placeholder="Search...."
+  />
+</div>
+<div
+  *ngIf="(categories | filterCategory : filterCategory).length == 0"
+  class="alert alert-success"
+>
+  There is no such a product
+</div>
+<div
+  *ngIf="dataLoaded === false"
+  class="spinner-border text-primary"
+  role="status"
+>
+  <span class="visually-hidden">Loading...</span>
+</div>
+
+<table *ngIf="dataLoaded === true" class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Category Name</th>
+      <th>Description</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let category of categories | filterCategory : filterCategory">
+      <td>{{ category.id }}</td>
+      <td>{{ category.name | uppercase }}</td>
+      <td>{{ category.description }}</td>
+      <td>
+        <button [routerLink]="['edit', category.id]" class="btn btn-success">
+          Edit
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
