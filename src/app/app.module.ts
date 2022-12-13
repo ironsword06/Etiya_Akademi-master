@@ -3,6 +3,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AuthorizationInterceptor } from './interceptors/authorization.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { CartSummaryComponent } from './components/cart-summary/cart-summary.component';
@@ -22,13 +23,13 @@ import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { NaviComponent } from './components/navi/navi.component';
 import { NgModule } from '@angular/core';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { OverlayLoadingComponent } from './components/overlay-loading/overlay-loading.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { ProductComponent } from './components/product/product.component';
 import { ProductFormComponent } from './components/product-form/product-form.component';
 import { ProductFormPageComponent } from './pages/product-form-page/product-form-page.component';
 import { ToastrModule } from 'ngx-toastr';
 import { VatAddedPipe } from './pipes/vat-added.pipe';
-import { OverlayLoadingComponent } from './components/overlay-loading/overlay-loading.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,12 @@ import { OverlayLoadingComponent } from './components/overlay-loading/overlay-lo
     NgxPaginationModule,
     ReactiveFormsModule,
   ],
-  providers: [{provide:HTTP_INTERCEPTORS, useClass:LoadingInterceptor,multi:true}],
+  providers: [{provide:HTTP_INTERCEPTORS, useClass:LoadingInterceptor,multi:true},
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthorizationInterceptor,
+      multi: true,
+    },],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
